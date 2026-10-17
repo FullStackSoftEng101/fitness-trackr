@@ -29,11 +29,12 @@ export async function createActivity(token, activity) {
     },
     body: JSON.stringify(activity),
   });
+  const result = await response.json();
 
   if (!response.ok) {
-    const result = await response.json();
     throw Error(result.message);
   }
+  return result;
 }
 
 export async function deleteActivity(token, id) {
@@ -42,11 +43,16 @@ export async function deleteActivity(token, id) {
   }
   const response = await fetch(API + "/activities/" + id, {
     method: "DELETE",
-    headers: { Authorization: "Bearer " + token },
+
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
   });
 
   if (!response.ok) {
     const result = await response.json();
+
     throw Error(result.message);
   }
 }
